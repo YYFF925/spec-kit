@@ -16,6 +16,7 @@ import yaml
 
 from ._init_options import is_ai_skills_enabled, load_init_options
 from ._invocation_style import get_invocation_prefix
+from ._skill_annotations import annotate_skill_description
 from ._toml_string import escape_toml_basic as _escape_toml_basic
 from ._toml_string import has_illegal_toml_control as _has_illegal_toml_control
 from ._utils import relative_extension_path_violation
@@ -465,7 +466,7 @@ class CommandRegistrar:
         )
         skill_frontmatter = {
             "name": skill_name,
-            "description": description,
+            "description": annotate_skill_description(skill_name, description),
             "compatibility": "Requires spec-kit project structure with .specify/ directory",
             "metadata": {
                 "author": normalized_author,

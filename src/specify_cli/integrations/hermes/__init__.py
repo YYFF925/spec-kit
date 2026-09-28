@@ -19,6 +19,7 @@ from typing import Any
 
 import yaml
 
+from ..._skill_annotations import annotate_skill_description
 from ..base import IntegrationOption, SkillsIntegration, yaml_quote
 from ..manifest import IntegrationManifest
 
@@ -183,6 +184,7 @@ class HermesIntegration(SkillsIntegration):
             description = frontmatter.get("description", "")
             if not description:
                 description = f"Spec Kit: {command_name} workflow"
+            description = annotate_skill_description(skill_name, description)
 
             # Build SKILL.md with manually formatted frontmatter. yaml_quote
             # escapes newlines and control characters that a plain quoted

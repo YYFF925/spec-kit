@@ -14,6 +14,7 @@ from typing import Any
 
 import yaml
 
+from ..._skill_annotations import annotate_skill_description
 from ..base import IntegrationOption, MarkdownIntegration, SkillsIntegration, yaml_quote
 from ..manifest import IntegrationManifest
 
@@ -169,6 +170,7 @@ class GenericIntegration(MarkdownIntegration):
                 )
 
         description = frontmatter.get("description") or f"Spec Kit: {command_name} workflow"
+        description = annotate_skill_description(skill_name, description)
         skill_content = (
             f"---\n"
             f"name: {yaml_quote(skill_name)}\n"

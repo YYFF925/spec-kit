@@ -194,8 +194,9 @@ class TestPresetSkills(PresetArtifactTestHelpers):
         assert parsed.get("argument-hint") == core_arg_hint, (
             f"argument-hint was not inherited from core; parsed={parsed}"
         )
-        # description must be exactly the preset's declared value, not concatenated
-        assert parsed["description"] == preset_description, (
+        # description must be exactly the preset's declared value (plus the
+        # fixed skill role annotation), not concatenated
+        assert parsed["description"] == f"（需求定义） {preset_description}", (
             f"description was corrupted; parsed={parsed}"
         )
 
@@ -502,7 +503,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-taskstoissues" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: COMMAND-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （转为Issue） COMMAND-FRONTMATTER-DESCRIPTION" in content
         assert "Convert tasks from tasks.md into GitHub issues." not in content
         assert "source: preset:taskstoissues-description" in content
 
@@ -534,7 +535,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-taskstoissues" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: CORE-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （转为Issue） CORE-FRONTMATTER-DESCRIPTION" in content
         assert "Convert tasks from tasks.md into GitHub issues." not in content
         assert "source: templates/commands/taskstoissues.md" in content
         assert "core taskstoissues body" in content
@@ -566,7 +567,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-taskstoissues" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: OVERRIDE-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （转为Issue） OVERRIDE-FRONTMATTER-DESCRIPTION" in content
         assert "Convert tasks from tasks.md into GitHub issues." not in content
         assert "source: override:speckit.taskstoissues" in content
         assert "override taskstoissues body" in content

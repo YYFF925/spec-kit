@@ -95,12 +95,12 @@ class TestSkillFrontmatterQuoting:
     def test_multiline_description_survives(self, tmp_path, monkeypatch):
         skill_file = self._generate(tmp_path, monkeypatch, HOSTILE_TEMPLATE)
         fm = _parse_frontmatter(skill_file)
-        assert fm["description"] == MULTILINE
+        assert fm["description"] == f"（实现规划） {MULTILINE}"
 
     def test_control_character_description_parses(self, tmp_path, monkeypatch):
         skill_file = self._generate(tmp_path, monkeypatch, CONTROL_TEMPLATE)
         fm = _parse_frontmatter(skill_file)
-        assert fm["description"] == CONTROL
+        assert fm["description"] == f"（实现规划） {CONTROL}"
 
 
 def _parse_frontmatter_line_anchored(skill_file: Path) -> dict:
@@ -146,7 +146,8 @@ class TestSkillFrontmatterEmbeddedDashes:
         fm = _parse_frontmatter_line_anchored(skill_file)
         # Buggy split("---", 2) truncates the value to "Separate sections with"
         # (or drops it entirely, falling back to "Spec Kit: plan workflow").
-        assert fm["description"] == DASHED_DESCRIPTION
+        # speckit-plan carries the fixed role annotation before the value.
+        assert fm["description"] == f"（实现规划） {DASHED_DESCRIPTION}"
 
     def test_leftover_frontmatter_not_spilled_into_body(self, tmp_path, monkeypatch):
         skill_file = self._generate(tmp_path, monkeypatch, DASHED_TEMPLATE)
@@ -177,7 +178,7 @@ class TestHermesSkillFrontmatterQuoting:
         assert len(skill_files) == 1
 
         fm = _parse_frontmatter(skill_files[0])
-        assert fm["description"] == MULTILINE
+        assert fm["description"] == f"（实现规划） {MULTILINE}"
 
     def test_dashed_description_is_preserved(self, tmp_path, monkeypatch):
         """Hermes overrides setup(), so it needs the same line-anchored parse."""
@@ -197,7 +198,7 @@ class TestHermesSkillFrontmatterQuoting:
         assert len(skill_files) == 1
 
         fm = _parse_frontmatter_line_anchored(skill_files[0])
-        assert fm["description"] == DASHED_DESCRIPTION
+        assert fm["description"] == f"（实现规划） {DASHED_DESCRIPTION}"
 
         content = skill_files[0].read_text(encoding="utf-8")
         lines = content.splitlines(keepends=True)
