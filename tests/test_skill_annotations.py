@@ -54,6 +54,24 @@ class TestAnnotateSkillDescription:
     def test_empty_description_unchanged(self):
         assert annotate_skill_description("speckit-plan", "") == ""
 
+    def test_core_command_templates_are_all_mapped(self):
+        commands_dir = Path(__file__).resolve().parent.parent / "templates" / "commands"
+        cores = {
+            f"speckit-{path.stem}"
+            for path in commands_dir.iterdir()
+            if path.is_file() and path.suffix == ".md"
+        }
+        missing = cores - SKILL_ANNOTATIONS.keys()
+        assert not missing, f"core skills missing Chinese annotations: {sorted(missing)}"
+
+    def test_bundled_extension_commands_are_mapped(self):
+        assert SKILL_ANNOTATIONS["speckit-github-taskstoissues"] == "转为Issue"
+        result = annotate_skill_description(
+            "speckit.github.taskstoissues",
+            "Convert tasks into GitHub issues.",
+        )
+        assert result == "（转为Issue） Convert tasks into GitHub issues."
+
 
 class TestSkillGeneratorsAnnotate:
     def test_build_skill_frontmatter_annotates_known_skill(self):
