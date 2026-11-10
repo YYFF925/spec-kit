@@ -8,6 +8,9 @@ handoffs:
     agent: speckit.clarify
     prompt: Clarify specification requirements
     send: true
+  - label: Cold-Read Test the Spec
+    agent: speckit.coldread
+    prompt: Verify the spec is self-contained for a zero-context agent
 ---
 
 ## User Input
@@ -179,7 +182,7 @@ Given that feature description, do this:
 
       ## Notes
 
-      - Items marked incomplete require spec updates before `__SPECKIT_COMMAND_CLARIFY__` or `__SPECKIT_COMMAND_PLAN__`
+      - Items marked incomplete require spec updates before `__SPECKIT_COMMAND_CLARIFY__`, `__SPECKIT_COMMAND_COLDREAD__`, or `__SPECKIT_COMMAND_PLAN__`
       ```
 
    b. **Run Validation Check**: Review the spec against each checklist item:
@@ -275,6 +278,8 @@ Report completion to the user with:
 - Checklist results summary
 - Readiness for the next phase (`__SPECKIT_COMMAND_CLARIFY__` or `__SPECKIT_COMMAND_PLAN__`)
 
+**Mandatory cold-read recommendation**: You MUST proactively recommend `__SPECKIT_COMMAND_COLDREAD__` before `__SPECKIT_COMMAND_PLAN__`: tell the user that a cold-read test verifies the spec is self-contained for a zero-context agent (no semantic gaps), and ask whether to run it now. Never skip this recommendation silently. If spec items are still unresolved, recommend resolving them (via `__SPECKIT_COMMAND_CLARIFY__`) first, then the cold read.
+
 **NOTE:** Branch creation is handled by the `before_specify` hook (git extension). Spec directory and file creation are always handled by this core command.
 
 ## Quick Guidelines
@@ -342,4 +347,5 @@ Success criteria must be:
 
 - [ ] Specification written to `SPEC_FILE` and validated against quality checklist
 - [ ] Extension hooks dispatched or skipped according to the rules in Mandatory Post-Execution Hooks above
+- [ ] Cold-read recommendation surfaced to the user before recommending plan
 - [ ] Completion reported to user with feature directory, spec file path, and checklist results

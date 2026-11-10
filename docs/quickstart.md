@@ -37,17 +37,18 @@ starting either path.
 4. `/speckit-implement`
 5. `/speckit-converge`
 
-**Full path** — for production features, adding `/speckit-clarify`, `/speckit-checklist`, and `/speckit-analyze` as quality gates:
+**Full path** — for production features, adding `/speckit-clarify`, `/speckit-coldread`, `/speckit-checklist`, and `/speckit-analyze` as quality gates:
 
 1. `/speckit-constitution` (once per project)
 2. `/speckit-specify`
 3. `/speckit-clarify`
-4. `/speckit-plan`
-5. `/speckit-checklist`
-6. `/speckit-tasks`
-7. `/speckit-analyze`
-8. `/speckit-implement`
-9. `/speckit-converge`
+4. `/speckit-coldread`
+5. `/speckit-plan`
+6. `/speckit-checklist`
+7. `/speckit-tasks`
+8. `/speckit-analyze`
+9. `/speckit-implement`
+10. `/speckit-converge`
 
 ### Install Specify
 
@@ -100,9 +101,19 @@ Asks targeted questions about anything underspecified and folds your answers bac
 /speckit-clarify Focus on task card behavior — status changes, comment permissions, and user assignment.
 ```
 
-<a id="step-4-speckitplan--choose-the-tech-stack"></a>
+<a id="step-4-speckitcoldread--verify-the-spec-stands-alone"></a>
 
-### Step 4: `/speckit-plan` — choose the tech stack
+### Step 4: `/speckit-coldread` — verify the spec stands alone
+
+Spawns a fresh zero-context agent to answer key requirement questions from the spec documents alone, then closes any gaps it reveals. A wrong answer is treated as a spec defect — the spec is fixed and a new reader re-tests it. Run it once the spec is settled, before planning.
+
+```text
+/speckit-coldread
+```
+
+<a id="step-5-speckitplan--choose-the-tech-stack"></a>
+
+### Step 5: `/speckit-plan` — choose the tech stack
 
 Generates the design artifacts from the spec. This is where implementation detail belongs — provide your tech stack and architecture.
 
@@ -110,9 +121,9 @@ Generates the design artifacts from the spec. This is where implementation detai
 /speckit-plan Use .NET Aspire with Postgres. The frontend is Blazor Server with drag-and-drop boards and real-time updates. Expose REST APIs for projects, tasks, and notifications.
 ```
 
-<a id="step-5-speckitchecklist--validate-the-spec"></a>
+<a id="step-6-speckitchecklist--validate-the-spec"></a>
 
-### Step 5: `/speckit-checklist` — validate the spec
+### Step 6: `/speckit-checklist` — validate the spec
 
 Generates a custom quality checklist — "unit tests for your requirements" — to confirm the spec is complete, clear, and consistent before you break the work down. These custom checklists are reviewer-owned requirements-quality review artifacts: mark an item `[x]` only when the reviewer determines that requirement-quality criterion is satisfied. Checked custom items do not mean implementation work is complete.
 
@@ -120,9 +131,9 @@ Generates a custom quality checklist — "unit tests for your requirements" — 
 /speckit-checklist
 ```
 
-<a id="step-6-speckittasks--break-the-work-down"></a>
+<a id="step-7-speckittasks--break-the-work-down"></a>
 
-### Step 6: `/speckit-tasks` — break the work down
+### Step 7: `/speckit-tasks` — break the work down
 
 Generates an actionable, dependency-ordered `tasks.md` from the design artifacts.
 
@@ -130,9 +141,9 @@ Generates an actionable, dependency-ordered `tasks.md` from the design artifacts
 /speckit-tasks
 ```
 
-<a id="step-7-speckitanalyze--check-consistency"></a>
+<a id="step-8-speckitanalyze--check-consistency"></a>
 
-### Step 7: `/speckit-analyze` — check consistency
+### Step 8: `/speckit-analyze` — check consistency
 
 Reports conflicts, gaps, and ambiguities across `spec.md`, `plan.md`, and `tasks.md`. It's read-only — if it flags issues, fix them at the source and re-run before implementing.
 
@@ -140,9 +151,9 @@ Reports conflicts, gaps, and ambiguities across `spec.md`, `plan.md`, and `tasks
 /speckit-analyze
 ```
 
-<a id="step-8-speckitimplement--build-it"></a>
+<a id="step-9-speckitimplement--build-it"></a>
 
-### Step 8: `/speckit-implement` — build it
+### Step 9: `/speckit-implement` — build it
 
 Executes the tasks in `tasks.md` in dependency order. Before implementation, it reads checklist checkbox state as a gate and asks before proceeding if any checklist items are unchecked; it does not change any checklist files or markers. The built-in `checklists/requirements.md` checklist is maintained by `/speckit-specify` and `/speckit-clarify`, while custom checklists remain reviewer-owned. Run it once to build everything, or scope it to one phase at a time for large features.
 
@@ -150,9 +161,9 @@ Executes the tasks in `tasks.md` in dependency order. Before implementation, it 
 /speckit-implement
 ```
 
-<a id="step-9-speckitconverge--verify-completeness"></a>
+<a id="step-10-speckitconverge--verify-completeness"></a>
 
-### Step 9: `/speckit-converge` — verify completeness
+### Step 10: `/speckit-converge` — verify completeness
 
 Checks the codebase against the spec, plan, and tasks. If it finds gaps, it appends new tasks to `tasks.md`; run `/speckit-implement` and converge again until it reports **Converged**. Otherwise you're done — proceed to review or open a PR.
 

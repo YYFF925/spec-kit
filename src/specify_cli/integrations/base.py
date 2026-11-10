@@ -46,6 +46,7 @@ _HOOK_COMMAND_NOTE = (
 _CORE_COMMAND_TEMPLATE_ORDER = (
     "analyze",
     "clarify",
+    "coldread",
     "constitution",
     "implement",
     "converge",

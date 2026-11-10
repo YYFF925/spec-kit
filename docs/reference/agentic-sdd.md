@@ -2,7 +2,7 @@
 
 The `/speckit.*` slash commands drive the core Spec-Driven Development (SDD) process — an **agentic process** your coding agent runs step by step. For a guided, end-to-end run see the [Quick Start Guide](../quickstart.md); this page is the detailed reference for each command — including arguments, output, and how they interact. For the philosophy behind the process, see [What is SDD?](../concepts/sdd.md). For bug triage, see [Agentic Bug Fix](agentic-bugfix.md).
 
-The commands are designed to run in order, but only `/speckit.specify` is strictly required before `/speckit.plan`. The clarify, checklist, and analyze commands are quality gates you add for anything with meaningful ambiguity.
+The commands are designed to run in order, but only `/speckit.specify` is strictly required before `/speckit.plan`. The clarify, coldread, checklist, and analyze commands are quality gates you add for anything with meaningful ambiguity.
 
 For evaluating an idea before committing to a specification, see
 [Agentic Idea Assessment](agentic-assessment.md). Assessment is optional and
@@ -12,7 +12,7 @@ independent of the SDD process.
 > Commands are written in `/speckit.*` form throughout this page. GitHub Copilot's default skills mode uses `/speckit-*`; some other agents use `$speckit-*` (e.g. Codex, ZCode) or `/skill:speckit-*` (e.g. Kimi). See [Command invocation](integrations.md#command-invocation).
 
 ```text
-/speckit.constitution -> /speckit.specify -> /speckit.clarify -> /speckit.plan -> /speckit.checklist -> /speckit.tasks -> /speckit.analyze -> /speckit.implement -> /speckit.converge
+/speckit.constitution -> /speckit.specify -> /speckit.clarify -> /speckit.coldread -> /speckit.plan -> /speckit.checklist -> /speckit.tasks -> /speckit.analyze -> /speckit.implement -> /speckit.converge
 ```
 
 ## Command overview
@@ -32,6 +32,7 @@ skills by default.
 | `/speckit.converge` | `speckit-converge` | Assess implementation against the artifacts and append remaining work |
 | `/speckit.taskstoissues` | `speckit-taskstoissues` | Optionally convert tasks into GitHub issues |
 | `/speckit.clarify` | `speckit-clarify` | Resolve ambiguity before planning (optional quality gate; formerly `/quizme`) |
+| `/speckit.coldread` | `speckit-coldread` | Spawn a fresh zero-context agent to verify the spec is self-contained (optional quality gate) |
 | `/speckit.analyze` | `speckit-analyze` | Check artifact consistency after tasks and before implementation (optional quality gate) |
 | `/speckit.checklist` | `speckit-checklist` | Generate requirements-quality checklists (optional quality gate) |
 
@@ -70,6 +71,18 @@ Asks up to five targeted questions about underspecified areas of the current spe
 Clarifying before planning keeps you from designing on top of ambiguity. If `/speckit.analyze` later surfaces requirement gaps, come back and run `/speckit.clarify` (or `/speckit.specify`) again.
 
 When `checklists/requirements.md` exists, `/speckit.clarify` may update its evaluated state as part of tightening the spec. This exception applies only to the built-in requirements checklist, not to custom review checklists.
+
+## `/speckit.coldread`
+
+Verifies the spec communicates every load-bearing decision to an agent with **zero conversation context**. Run it once the spec is settled — after `/speckit.specify`, and ideally after `/speckit.clarify` — and before `/speckit.plan`. It is an optional quality gate; `/speckit.specify` and `/speckit.clarify` proactively suggest it when they finish.
+
+```text
+/speckit.coldread
+```
+
+The current agent turns the requirements discussion into key questions (entities and relationships, decisions and boundaries, scenario reasoning, term traps), then spawns a fresh zero-context agent that answers from the spec documents alone. A wrong answer is treated as a documentation defect by default: the spec is fixed and a new reader re-tests the failed questions (at most two rounds).
+
+Intent travels through the documents only — reference answers and conversation context never reach the reader. This command may edit `spec.md` to close gaps; its report stays in the conversation and is not written to disk. Once the verdict is clean, proceed to `/speckit.plan`.
 
 ## `/speckit.plan`
 

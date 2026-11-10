@@ -144,6 +144,7 @@ After initialization, you should see the following commands available in your co
 - `/speckit.implement` - Execute implementation tasks
 - `/speckit.analyze` - Validate cross-artifact consistency
 - `/speckit.clarify` - Identify and resolve ambiguities
+- `/speckit.coldread` - Verify the spec is self-contained for a zero-context agent
 - `/speckit.checklist` - Generate quality checklists
 - `/speckit.constitution` - Create or update project principles
 - `/speckit.converge` - Assess codebase against artifacts and append remaining tasks

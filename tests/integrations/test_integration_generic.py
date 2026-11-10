@@ -365,6 +365,7 @@ class TestGenericIntegration:
         [
             "analyze",
             "clarify",
+            "coldread",
             "converge",
             "implement",
             "plan",
@@ -434,6 +435,7 @@ class TestGenericIntegration:
             ".myagent/commands/speckit.analyze.md",
             ".myagent/commands/speckit.checklist.md",
             ".myagent/commands/speckit.clarify.md",
+            ".myagent/commands/speckit.coldread.md",
             ".myagent/commands/speckit.constitution.md",
             ".myagent/commands/speckit.converge.md",
             ".myagent/commands/speckit.implement.md",
@@ -581,6 +583,7 @@ class TestGenericIntegration:
             ".myagent/commands/speckit.analyze.md",
             ".myagent/commands/speckit.checklist.md",
             ".myagent/commands/speckit.clarify.md",
+            ".myagent/commands/speckit.coldread.md",
             ".myagent/commands/speckit.constitution.md",
             ".myagent/commands/speckit.converge.md",
             ".myagent/commands/speckit.implement.md",

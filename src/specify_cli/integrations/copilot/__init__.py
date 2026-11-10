@@ -36,6 +36,7 @@ _COPILOT_CORE_COMMANDS = {
     "analyze",
     "checklist",
     "clarify",
+    "coldread",
     "constitution",
     "converge",
     "implement",

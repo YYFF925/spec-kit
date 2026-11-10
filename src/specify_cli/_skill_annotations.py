@@ -11,6 +11,7 @@ SKILL_ANNOTATIONS = {
     "speckit-constitution": "项目原则",
     "speckit-specify": "需求定义",
     "speckit-clarify": "需求澄清",
+    "speckit-coldread": "冷读测试",
     "speckit-plan": "实现规划",
     "speckit-tasks": "任务拆分",
     "speckit-analyze": "一致性分析",

@@ -377,6 +377,7 @@ class YamlIntegrationTests:
     COMMAND_STEMS = [
         "analyze",
         "clarify",
+        "coldread",
         "constitution",
         "converge",
         "implement",

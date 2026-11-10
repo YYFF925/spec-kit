@@ -54,6 +54,7 @@ _FALLBACK_CORE_COMMAND_NAMES = frozenset(
         "analyze",
         "checklist",
         "clarify",
+        "coldread",
         "constitution",
         "converge",
         "implement",

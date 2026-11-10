@@ -19,6 +19,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+import yaml
 
 from specify_cli.integrations.base import IntegrationBase
 from tests.parity_helpers import HAS_POWERSHELL, POWERSHELL_EXE
@@ -63,6 +64,27 @@ def test_py_templates_discovered():
     # the parametrized tests below would silently pass on an empty set.
     assert "implement.md" in PY_TEMPLATES
     assert "clarify.md" in PY_TEMPLATES
+
+
+def test_coldread_prerequisites_use_paths_only_mode():
+    """A pre-plan command must not use the validating prerequisite mode.
+
+    ``coldread`` runs before ``plan.md`` exists (after ``specify``/``clarify``,
+    before ``plan``), but the non-``--paths-only`` check-prerequisites mode
+    unconditionally requires ``plan.md`` and would abort the command. Every
+    script variant must therefore resolve paths only, and none may ask for the
+    spec/plan gate.
+    """
+    frontmatter = (TEMPLATES_DIR / "coldread.md").read_text(encoding="utf-8")
+    scripts = yaml.safe_load(frontmatter.split("---", 2)[1])["scripts"]
+
+    assert set(scripts) == {"sh", "ps", "py"}
+    for variant, command in scripts.items():
+        assert "paths-only" in command or "-PathsOnly" in command, (
+            f"coldread.md {variant} script is not paths-only: {command!r}"
+        )
+        assert "--require-spec" not in command, command
+        assert "-RequireSpec" not in command, command
 
 
 @pytest.mark.parametrize("name", PY_TEMPLATES)

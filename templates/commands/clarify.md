@@ -1,6 +1,9 @@
 ---
 description: Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec.
 handoffs:
+  - label: Cold-Read Test the Spec
+    agent: speckit.coldread
+    prompt: Verify the spec is self-contained for a zero-context agent
   - label: Build Technical Plan
     agent: speckit.plan
     prompt: Create a plan for the spec. I am building with...
@@ -283,9 +286,12 @@ Report completion (after questioning loop ends or early termination):
 - If any Outstanding or Deferred remain, recommend whether to proceed to `__SPECKIT_COMMAND_PLAN__` or run `__SPECKIT_COMMAND_CLARIFY__` again later post-plan.
 - Suggested next command.
 
+**Mandatory cold-read recommendation**: You MUST proactively recommend `__SPECKIT_COMMAND_COLDREAD__` before `__SPECKIT_COMMAND_PLAN__`: tell the user that a cold-read test verifies the spec is self-contained for a zero-context agent (no semantic gaps), and ask whether to run it now. Never skip this recommendation silently. If spec items are still unresolved, recommend resolving them (via `__SPECKIT_COMMAND_CLARIFY__`) first, then the cold read.
+
 ## Done When
 
 - [ ] Spec ambiguities identified and clarifications integrated into spec file
 - [ ] Spec quality checklist re-validated against updated spec (if `FEATURE_DIR/checklists/requirements.md` exists)
 - [ ] Extension hooks dispatched or skipped according to the rules in Mandatory Post-Execution Hooks above
+- [ ] Cold-read recommendation surfaced to the user before recommending plan
 - [ ] Completion reported to user with questions answered, sections touched, checklist status, and coverage summary
