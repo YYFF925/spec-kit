@@ -385,7 +385,6 @@ class YamlIntegrationTests:
         "checklist",
         "specify",
         "tasks",
-        "taskstoissues",
     ]
 
     def _expected_files(self, script_variant: str) -> list[str]:
