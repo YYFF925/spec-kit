@@ -197,7 +197,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
         )
         # description must be exactly the preset's declared value (plus the
         # fixed skill role annotation), not concatenated
-        assert parsed["description"] == f"（需求定义） {preset_description}", (
+        assert parsed["description"] == f"（2.需求定义） {preset_description}", (
             f"description was corrupted; parsed={parsed}"
         )
 
@@ -504,7 +504,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-tasks" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: （任务拆分） COMMAND-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （7.任务拆分） COMMAND-FRONTMATTER-DESCRIPTION" in content
         assert "Break down implementation plans into actionable task lists." not in content
         assert "source: preset:tasks-description" in content
 
@@ -536,7 +536,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-tasks" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: （任务拆分） CORE-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （7.任务拆分） CORE-FRONTMATTER-DESCRIPTION" in content
         assert "Break down implementation plans into actionable task lists." not in content
         assert "source: templates/commands/tasks.md" in content
         assert "core tasks body" in content
@@ -568,7 +568,7 @@ class TestPresetSkills(PresetArtifactTestHelpers):
 
         skill_file = skills_dir / "speckit-tasks" / "SKILL.md"
         content = skill_file.read_text()
-        assert "description: （任务拆分） OVERRIDE-FRONTMATTER-DESCRIPTION" in content
+        assert "description: （7.任务拆分） OVERRIDE-FRONTMATTER-DESCRIPTION" in content
         assert "Break down implementation plans into actionable task lists." not in content
         assert "source: override:speckit.tasks" in content
         assert "override tasks body" in content

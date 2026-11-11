@@ -1,10 +1,10 @@
 """Fixed Chinese role annotations on generated Spec Kit skill descriptions.
 
-``spec-kit init`` prepends a short role label (e.g. ``（需求定义）``) to the
+``spec-kit init`` prepends a short role label (e.g. ``（2.需求定义）``) to the
 description of each known core skill so skill lists and pickers surface its
-responsibility at a glance. The original description must survive verbatim
-after the label, re-generation must never stack labels, and skills outside
-the mapping must keep their description untouched.
+responsibility and recommended order at a glance. The original description
+must survive verbatim after the label, re-generation must never stack
+labels, and skills outside the mapping must keep their description untouched.
 """
 
 from pathlib import Path
@@ -28,7 +28,7 @@ SPECIFY_DESCRIPTION = (
 class TestAnnotateSkillDescription:
     def test_known_skill_gets_label_and_keeps_description(self):
         result = annotate_skill_description("speckit-specify", SPECIFY_DESCRIPTION)
-        assert result == f"（需求定义） {SPECIFY_DESCRIPTION}"
+        assert result == f"（2.需求定义） {SPECIFY_DESCRIPTION}"
 
     def test_every_mapped_skill_uses_its_own_label(self):
         for skill_name, note in SKILL_ANNOTATIONS.items():
@@ -37,12 +37,12 @@ class TestAnnotateSkillDescription:
 
     def test_legacy_dotted_name_is_annotated(self):
         result = annotate_skill_description("speckit.plan", "Generate plans.")
-        assert result == "（实现规划） Generate plans."
+        assert result == "（5.实现规划） Generate plans."
 
     def test_re_annotation_does_not_stack(self):
         once = annotate_skill_description("speckit-plan", "Execute the planning workflow.")
         twice = annotate_skill_description("speckit-plan", once)
-        assert once == twice == "（实现规划） Execute the planning workflow."
+        assert once == twice == "（5.实现规划） Execute the planning workflow."
 
     def test_unknown_skill_unchanged(self):
         description = "Some extension command description."
@@ -72,13 +72,36 @@ class TestAnnotateSkillDescription:
         )
         assert result == "（转为Issue） Convert tasks into GitHub issues."
 
+    def test_core_labels_follow_full_path_order(self):
+        expected = [
+            ("speckit-constitution", "1.项目原则"),
+            ("speckit-specify", "2.需求定义"),
+            ("speckit-clarify", "3.需求澄清"),
+            ("speckit-coldread", "4.冷读测试"),
+            ("speckit-plan", "5.实现规划"),
+            ("speckit-checklist", "6.需求质检"),
+            ("speckit-tasks", "7.任务拆分"),
+            ("speckit-analyze", "8.一致性分析"),
+            ("speckit-implement", "9.代码实现"),
+            ("speckit-converge", "10.查漏补缺"),
+        ]
+        for skill_name, note in expected:
+            assert SKILL_ANNOTATIONS[skill_name] == note
+
+    def test_stale_unnumbered_label_is_replaced(self):
+        result = annotate_skill_description(
+            "speckit-plan",
+            "（实现规划） Generate plans.",
+        )
+        assert result == "（5.实现规划） Generate plans."
+
 
 class TestSkillGeneratorsAnnotate:
     def test_build_skill_frontmatter_annotates_known_skill(self):
         fm = CommandRegistrar.build_skill_frontmatter(
             "codex", "speckit-plan", "Execute plans.", "templates/commands/plan.md"
         )
-        assert fm["description"] == "（实现规划） Execute plans."
+        assert fm["description"] == "（5.实现规划） Execute plans."
 
     def test_build_skill_frontmatter_leaves_unknown_skill_unchanged(self):
         fm = CommandRegistrar.build_skill_frontmatter(
@@ -138,4 +161,4 @@ class TestSkillGeneratorsAnnotate:
         )
         assert skill_name == "speckit-plan"
         fm = yaml.safe_load(content.split("---", 2)[1])
-        assert fm["description"] == "（实现规划） Generate plans."
+        assert fm["description"] == "（5.实现规划） Generate plans."
